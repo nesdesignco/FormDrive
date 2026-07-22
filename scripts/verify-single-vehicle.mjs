@@ -40,25 +40,54 @@ const evaluate = async (expression) => {
 await send("Page.enable");
 await send("Runtime.enable");
 await send("Log.enable");
+await send("Network.enable");
+await send("Network.setCacheDisabled", { cacheDisabled: true });
 await send("Emulation.setDeviceMetricsOverride", { width: 1536, height: 900, deviceScaleFactor: 1, mobile: false });
 await send("Page.navigate", { url: baseUrl });
 await delay(4200);
 
+const initialModelUrls = await evaluate(`performance.getEntriesByType('resource')
+  .map((entry) => entry.name)
+  .filter((name) => name.endsWith('.glb'))`);
+const initialVehicle = await evaluate(`(() => ({
+  rendered: window.__formdriveRenderedVehicleIds?.() ?? [],
+  audited: window.__formdriveSceneAudit?.().vehicle ?? null
+}))()`);
 const order = ["tesla", "concept", "mustang", "concept", "tesla", "mustang", "tesla", "concept", "mustang"];
 const indexByVehicle = { mustang: 0, tesla: 1, concept: 2 };
 const switches = [];
+const stagedLoads = [];
+
+async function waitForVehicle(vehicle, timeout = 24000) {
+  const startedAt = Date.now();
+  while (Date.now() - startedAt < timeout) {
+    const result = await evaluate(`(() => ({
+      expected: ${JSON.stringify(vehicle)},
+      selectedIndex: [...document.querySelectorAll('.vehicle-selector button')].findIndex((button) => button.getAttribute('aria-pressed') === 'true'),
+      rendered: window.__formdriveRenderedVehicleIds?.() ?? [],
+      audited: window.__formdriveSceneAudit?.().vehicle ?? null,
+      pending: document.querySelector('.vehicle-selector button[aria-busy="true"]')?.getAttribute('aria-label') ?? null,
+      anchors: window.__formdriveSceneAudit?.().lighting.anchors ?? null,
+      beams: window.__formdriveBeamAudit?.() ?? null
+    }))()`);
+    if (result.audited === vehicle && result.rendered.length === 1 && result.rendered[0] === vehicle && result.selectedIndex === indexByVehicle[vehicle]) return result;
+    await delay(100);
+  }
+  throw new Error(`Timed out waiting for ${vehicle}`);
+}
 
 for (const vehicle of order) {
+  const previous = await evaluate(`window.__formdriveSceneAudit?.().vehicle ?? null`);
   await evaluate(`document.querySelectorAll('.vehicle-selector button')[${indexByVehicle[vehicle]}]?.click()`);
-  await delay(700);
-  switches.push(await evaluate(`(() => ({
+  await delay(35);
+  stagedLoads.push(await evaluate(`(() => ({
     expected: ${JSON.stringify(vehicle)},
-    selectedIndex: [...document.querySelectorAll('.vehicle-selector button')].findIndex((button) => button.getAttribute('aria-pressed') === 'true'),
+    previous: ${JSON.stringify(previous)},
+    pending: document.querySelectorAll('.vehicle-selector button')[${indexByVehicle[vehicle]}]?.getAttribute('aria-busy') === 'true',
     rendered: window.__formdriveRenderedVehicleIds?.() ?? [],
-    audited: window.__formdriveSceneAudit?.().vehicle ?? null,
-    anchors: window.__formdriveSceneAudit?.().lighting.anchors ?? null,
-    beams: window.__formdriveBeamAudit?.() ?? null
+    audited: window.__formdriveSceneAudit?.().vehicle ?? null
   }))()`));
+  switches.push(await waitForVehicle(vehicle));
 }
 
 await evaluate(`[...document.querySelectorAll('.camera-button')].find((button) => button.textContent.includes('Profile'))?.click()`);
@@ -102,7 +131,15 @@ const cameraDelta = Math.hypot(...cameraAfterDrag.position.map((value, index) =>
 const monotonic = (values, direction) => values.every((value, index) => index === 0 || (direction === "up" ? value >= values[index - 1] : value <= values[index - 1]));
 const offIntensities = lightOffSamples.map((sample) => sample.left.intensity);
 const onIntensities = lightOnSamples.map((sample) => sample.left.intensity);
-const passed = switches.every((result) => result.rendered.length === 1
+const pendingSamples = stagedLoads.filter((result) => result.pending);
+const passed = initialModelUrls.length === 1
+  && initialModelUrls[0].includes('mustang-2005.glb')
+  && initialVehicle.rendered.length === 1
+  && initialVehicle.rendered[0] === 'mustang'
+  && initialVehicle.audited === 'mustang'
+  && pendingSamples.length >= 2
+  && pendingSamples.every((result) => result.rendered.length === 1 && result.rendered[0] === result.previous && result.audited === result.previous)
+  && switches.every((result) => result.rendered.length === 1
     && result.rendered[0] === result.expected
     && result.audited === result.expected
     && result.anchors?.left?.length === 3
@@ -118,7 +155,8 @@ const passed = switches.every((result) => result.rendered.length === 1
   && lightOnSamples.every((sample) => sample.left.decay === 2 && sample.right.decay === 2)
   && events.length === 0;
 
-console.log(JSON.stringify({ passed, switches, cameraBeforeDrag, cameraAfterDrag, cameraDelta, headlightGeometry, lightOffSamples, lightOnSamples, events: events.length }, null, 2));
+console.log(JSON.stringify({ passed, initialModelUrls, initialVehicle, stagedLoads, switches, cameraBeforeDrag, cameraAfterDrag, cameraDelta, headlightGeometry, lightOffSamples, lightOnSamples, events: events.length }, null, 2));
 socket.close();
+await fetch(`http://127.0.0.1:${debugPort}/json/close/${target.id}`);
 
 if (!passed) process.exitCode = 1;

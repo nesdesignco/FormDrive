@@ -316,3 +316,5 @@ const summary = {
 };
 console.log(JSON.stringify(process.argv.includes("--summary") ? summary : report, null, 2));
 socket.close();
+await fetch(`http://127.0.0.1:${debugPort}/json/close/${target.id}`);
+if (!passed) process.exitCode = 1;

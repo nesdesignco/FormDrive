@@ -700,6 +700,7 @@ input[type="range"] {
 }
 
 .vehicle-selector button {
+  position: relative;
   display: grid;
   grid-template-columns: 4.75rem 1.35rem minmax(0, 1fr) auto;
   grid-template-rows: 1fr;
@@ -715,6 +716,24 @@ input[type="range"] {
   cursor: pointer;
   text-align: start;
   transition: transform var(--dur-micro) var(--ease-out), background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+}
+
+.vehicle-selector button::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--space-xs);
+  inset-block-end: var(--space-2xs);
+  height: 1px;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.vehicle-selector button[data-state="loading"]::after {
+  opacity: .85;
+  animation: vehicle-load-progress 1.2s var(--ease-in-out) infinite;
 }
 
 .vehicle-preview {
@@ -948,6 +967,13 @@ input[type="range"] {
   to { opacity: 1; transform: none; filter: blur(0); }
 }
 
+@keyframes vehicle-load-progress {
+  0% { transform: scaleX(0); transform-origin: left; }
+  48% { transform: scaleX(1); transform-origin: left; }
+  52% { transform: scaleX(1); transform-origin: right; }
+  100% { transform: scaleX(0); transform-origin: right; }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1128,6 +1154,8 @@ input[type="range"] {
 
   .hero-copy {
     inset-block-start: 6rem;
+    inset-inline-end: 5rem;
+    width: auto;
   }
 
   .hero-copy h1 {
@@ -1144,7 +1172,7 @@ input[type="range"] {
 
   .vehicle-selector {
     inset-inline: var(--space-md);
-    inset-block-start: 10.75rem;
+    inset-block-start: 12.25rem;
     inset-block-end: auto;
     width: auto;
     padding: var(--space-xs);

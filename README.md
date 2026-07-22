@@ -8,6 +8,7 @@
 [![Three.js](https://img.shields.io/badge/Three.js-WebGPU%20%2B%20WebGL-202124?style=flat-square&logo=threedotjs&logoColor=white)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7-202124?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
 [![License: MIT](https://img.shields.io/badge/Source-MIT-d8caa8?style=flat-square)](./LICENSE)
+[![Live studio](https://img.shields.io/badge/Live-GitHub%20Pages-d8caa8?style=flat-square)](https://nesdesignco.github.io/FormDrive/)
 
 Created by [Enes Kaymaz](https://github.com/nesdesignco) · [X](https://x.com/nesdesignco)
 
@@ -45,6 +46,19 @@ All moving parts use model-specific pivots and definitions. Compound meshes—su
 - PNG studio capture
 - Responsive English interface with keyboard-visible focus states
 - Automated browser verification for every vehicle and moving part
+- Staged vehicle loading that keeps the current car visible during downloads
+
+## Loading architecture
+
+FormDrive downloads only the Mustang model for the first scene. Selecting another car starts an isolated background load while the current car remains mounted and interactive. The selection commits only after the requested GLB is parsed successfully; a failed download never blanks the studio. Previously opened models remain in the in-memory glTF cache for instant return visits without being rendered off-screen.
+
+| Model payload | Loading stage | File size |
+| --- | --- | ---: |
+| Mustang GT | Initial scene | 7.31 MiB |
+| Model 3 | On selection | 21.62 MiB |
+| K15 Concept | On selection | 11.23 MiB |
+
+This policy is intentionally optimized for a three-car collection. A much larger catalog should add a bounded LRU cache and explicit Three.js resource disposal.
 
 ## Technology
 
@@ -83,6 +97,14 @@ npm run preview
 ```
 
 The production output is written to `dist/`. Generated output, local browser captures and editor state are intentionally excluded from version control.
+
+## Deployment
+
+Every push to `main` is built and published by the included GitHub Pages workflow:
+
+**[Open the live FormDrive studio](https://nesdesignco.github.io/FormDrive/)**
+
+Vercel can also import the repository directly with the Vite preset, `npm run build` as the build command and `dist` as the output directory. Node.js is pinned to the 22.x release line for reproducible clean installs.
 
 ## Project structure
 
@@ -133,8 +155,10 @@ The suites validate:
 - Camera presets and return to free orbit
 - Headlight anchors, projected beams and light switching
 - Ground contact and one-vehicle-only rendering
+- Cold-start model requests and staged, non-blank vehicle switching
 - Collection labels, preview assets and menu collisions
 - Configuration panel motion and safe scrolling
+- Responsive geometry at desktop, laptop, tablet and mobile viewports
 - WebGPU renderer activation and console errors
 
 ## Model attribution

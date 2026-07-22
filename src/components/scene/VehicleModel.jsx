@@ -315,8 +315,6 @@ function VehicleModelInstance({ vehicleId }) {
 }
 
 useGLTF.preload(VEHICLES.mustang.url);
-useGLTF.preload(VEHICLES.tesla.url);
-useGLTF.preload(VEHICLES.concept.url);
 
 export function VehicleModel() {
   const selectedVehicle = useStudioStore((state) => state.vehicle);

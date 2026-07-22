@@ -4,6 +4,7 @@ import { ACESFilmicToneMapping, SRGBColorSpace, WebGLRenderer } from "three";
 import { CameraRig } from "./CameraRig";
 import { HeadlightRig } from "./HeadlightRig";
 import { StudioEnvironment } from "./StudioEnvironment";
+import { VehicleAssetLoader } from "./VehicleAssetLoader";
 import { VehicleModel } from "./VehicleModel";
 import { useStudioStore } from "../../state/useStudioStore";
 
@@ -28,5 +29,5 @@ export function StudioCanvas() {
     renderer.toneMappingExposure = 1.05;
     return renderer;
   };
-  return <div className="scene" aria-label="Interactive three-dimensional vehicle studio"><Canvas shadows dpr={[1, 1.8]} camera={{ fov: 36, near: 0.1, far: 120, position: [6.8, 3.1, 7.6] }} gl={createRenderer} onCreated={({ gl }) => { setRenderer(gl); document.documentElement.dataset.renderer = gl.isWebGPURenderer ? "webgpu" : "webgl"; }}><Suspense fallback={null}><StudioEnvironment /><VehicleModel /><HeadlightRig /></Suspense><CameraRig /></Canvas></div>;
+  return <div className="scene" aria-label="Interactive three-dimensional vehicle studio"><Canvas shadows dpr={[1, 1.8]} camera={{ fov: 36, near: 0.1, far: 120, position: [6.8, 3.1, 7.6] }} gl={createRenderer} onCreated={({ gl }) => { setRenderer(gl); document.documentElement.dataset.renderer = gl.isWebGPURenderer ? "webgpu" : "webgl"; }}><Suspense fallback={null}><StudioEnvironment /><VehicleModel /><HeadlightRig /></Suspense><VehicleAssetLoader /><CameraRig /></Canvas></div>;
 }

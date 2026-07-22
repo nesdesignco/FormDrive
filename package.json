@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/nesdesignco/FormDrive/issues"
   },
-  "homepage": "https://github.com/nesdesignco/FormDrive#readme",
+  "homepage": "https://nesdesignco.github.io/FormDrive/",
   "keywords": [
     "threejs",
     "react-three-fiber",
@@ -36,10 +36,9 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^6.0.4",
     "vite": "^7.1.7"
   },
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   }
 }

@@ -1,3 +1,5 @@
+const assetUrl = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+
 export const PAINTS = {
   obsidian: { label: "Obsidian", color: "#171615", metalness: 0.78 },
   silver: { label: "Liquid silver", color: "#b9bbb6", metalness: 0.92 },
@@ -8,8 +10,8 @@ export const PAINTS = {
 
 export const VEHICLES = {
   mustang: {
-    eyebrow: "FORD MUSTANG GT", year: "2005", label: "Mustang GT", note: "American muscle", thumbnail: "/models/mustang-preview.jpg",
-    url: "/models/mustang-2005.glb", rotation: [0, -0.08, 0], groundOffset: -0.015,
+    eyebrow: "FORD MUSTANG GT", year: "2005", label: "Mustang GT", note: "American muscle", thumbnail: assetUrl("models/mustang-preview.jpg"),
+    url: assetUrl("models/mustang-2005.glb"), rotation: [0, -0.08, 0], groundOffset: -0.015,
     parts: {
       leftDoor: { label: "Left door", prefix: "leftdoor_", ascend: 1, axis: "y", angle: -1.02 },
       rightDoor: { label: "Right door", prefix: "rightdoor_", ascend: 1, axis: "y", angle: 1.02 },
@@ -22,8 +24,8 @@ export const VEHICLES = {
     paintNames: ["carpaint"], rimNames: ["frdperofrmcrim", "aluminium_clean2", "aluminium_clean3"], lightNames: ["headlight"], tailLightNames: ["tailight_reddrk", "tailight_redglass"],
   },
   tesla: {
-    eyebrow: "TESLA MODEL 3", year: "2018", label: "Model 3", note: "Electric sedan", thumbnail: "/models/tesla-preview.jpg",
-    url: "/models/tesla-model-3-2018.glb", rotation: [0, Math.PI, 0], groundOffset: -0.025,
+    eyebrow: "TESLA MODEL 3", year: "2018", label: "Model 3", note: "Electric sedan", thumbnail: assetUrl("models/tesla-preview.jpg"),
+    url: assetUrl("models/tesla-model-3-2018.glb"), rotation: [0, Math.PI, 0], groundOffset: -0.025,
     parts: {
       leftDoor: { label: "Front left", exact: "door_lf_dummy", axis: "z", angle: -1.08 },
       rearLeftDoor: { label: "Rear left", exact: "door_lr_dummy", axis: "z", angle: -1.02 },
@@ -39,8 +41,8 @@ export const VEHICLES = {
     paintNames: ["primary", "paint_black", "putih_putih0_0", "putih002_putih0_0"], rimNames: ["wheels"], lightNames: ["right_front_light", "left_front_light", "foglight_r", "foglight_l"], tailLightNames: ["right_rear_light", "left_rear_light", "breaklight_l"],
   },
   concept: {
-    eyebrow: "K15 CONCEPT COUPÉ", year: "2021", label: "K15 Concept", note: "Technical coupé", thumbnail: "/models/concept-preview.jpg",
-    url: "/models/car-concept.glb", rotation: [0, 0.08, 0], groundOffset: -0.16,
+    eyebrow: "K15 CONCEPT COUPÉ", year: "2021", label: "K15 Concept", note: "Technical coupé", thumbnail: assetUrl("models/concept-preview.jpg"),
+    url: assetUrl("models/car-concept.glb"), rotation: [0, 0.08, 0], groundOffset: -0.16,
     parts: {
       leftDoor: { label: "Left door", exact: "BodyDoorLColor1", axis: "z", angle: -1.0 },
       rightDoor: { label: "Right door", exact: "BodyDoorRColor1", axis: "z", angle: 1.0 },
