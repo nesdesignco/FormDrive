@@ -1,0 +1,30 @@
+:root {
+  --color-paper: oklch(13% .012 60); --color-paper-2: oklch(17% .014 60); --color-paper-3: oklch(22% .016 60);
+  --color-surface: oklch(18% .014 60 / .58); --color-surface-solid: oklch(18% .014 60 / .9); --color-surface-hover: oklch(82% .025 80 / .12);
+  --color-rule: oklch(88% .018 80 / .22); --color-rule-soft: oklch(82% .014 80 / .12); --color-neutral: oklch(68% .012 60);
+  --color-muted: oklch(77% .01 70); --color-ink: oklch(95% .008 78); --color-ink-soft: oklch(88% .01 70);
+  --color-accent: oklch(88% .055 85); --color-accent-ink: oklch(18% .022 65); --color-focus: oklch(92% .05 85);
+  --color-error: oklch(68% .17 28); --color-success: oklch(72% .12 145); --color-backdrop: oklch(8% .012 60 / .72);
+  --color-shadow: oklch(5% .01 60 / .48); --color-transparent: transparent;
+  --color-vignette-top: oklch(12% .014 60 / .58); --color-vignette-bottom: oklch(12% .014 60 / .3);
+  --color-glass-top: oklch(98% .012 85 / .16); --color-glass-mid: oklch(88% .018 80 / .07); --color-glass-base: oklch(16% .014 60 / .24);
+  --color-glass-base-strong: oklch(14% .014 60 / .44); --color-glass-border: oklch(98% .012 85 / .28); --color-glass-border-strong: oklch(98% .014 85 / .42);
+  --color-glass-highlight: oklch(99% .008 85 / .22); --color-glass-shade: oklch(5% .01 60 / .2); --color-glass-shadow: oklch(5% .01 60 / .32);
+  --color-glass-control: oklch(96% .012 85 / .045); --color-glass-control-hover: oklch(96% .016 85 / .11); --color-glass-control-active: oklch(92% .035 85 / .15);
+  --color-switch-thumb: oklch(97% .015 85); --color-switch-shadow: oklch(8% .012 60 / .36);
+  --glass-surface: radial-gradient(120% 110% at 8% -16%, var(--color-glass-top), var(--color-transparent) 44%), linear-gradient(145deg, var(--color-glass-mid), var(--color-glass-base));
+  --glass-surface-strong: radial-gradient(120% 110% at 8% -16%, var(--color-glass-top), var(--color-transparent) 44%), linear-gradient(145deg, var(--color-glass-mid), var(--color-glass-base-strong));
+  --glass-shadow: inset 0 1px 0 var(--color-glass-highlight), inset 0 -1px 0 var(--color-glass-shade), 0 1.25rem 3.5rem var(--color-glass-shadow);
+  --glass-filter: blur(34px) saturate(185%) contrast(108%);
+  --paint-obsidian: oklch(18% .012 65); --paint-silver: oklch(78% .014 80); --paint-copper: oklch(38% .13 18);
+  --paint-ivory: oklch(92% .03 85); --paint-blue: oklch(31% .1 255);
+  --font-display: "Instrument Serif", ui-serif, serif; --font-body: "Geist", ui-sans-serif, sans-serif; --font-outlier: "JetBrains Mono", ui-monospace, monospace;
+  --space-3xs: .125rem; --space-2xs: .25rem; --space-xs: .5rem; --space-sm: .75rem; --space-md: 1rem; --space-lg: 1.5rem;
+  --space-xl: 2.5rem; --space-2xl: 4rem; --space-3xl: 6rem; --space-4xl: 9rem;
+  --text-xs: .64rem; --text-sm: .8rem; --text-base: 1rem; --text-md: 1.25rem; --text-lg: 1.5625rem; --text-xl: 1.9531rem;
+  --text-2xl: 2.4414rem; --text-3xl: 3.0518rem; --text-4xl: 3.8147rem; --text-display: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+  --ease-out: cubic-bezier(.16, 1, .3, 1); --ease-in: cubic-bezier(.7, 0, .84, 0); --ease-in-out: cubic-bezier(.65, 0, .35, 1);
+  --dur-micro: .12s; --dur-short: .2s; --dur-long: .38s; --rule-hair: 1px;
+  --radius-sm: .5rem; --radius-md: .875rem; --radius-lg: 1.25rem; --radius-pill: 999px;
+  --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
+}
