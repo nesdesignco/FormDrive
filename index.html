@@ -5,11 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#11100f" />
     <meta name="description" content="FORMDRIVE — an open-source interactive automotive design studio by Enes Kaymaz." />
+    <script>
+      try {
+        if (window.localStorage.getItem("formdrive:studio-ready:v1") === "1") {
+          document.documentElement.classList.add("formdrive-cached");
+        }
+      } catch {}
+    </script>
     <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;700&family=Instrument+Serif&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <style>
+      html,body{margin:0;background:#151412;color:#f2efe9}
+      .loading-screen--boot{position:fixed;inset:0;display:grid;grid-template-rows:auto 1fr auto;box-sizing:border-box;padding:clamp(1.25rem,5vw,4rem);background:#151412;font-family:ui-monospace,monospace}
+      .loading-screen--boot .loading-header,.loading-screen--boot .loading-status{display:flex;justify-content:space-between;gap:1rem;font-size:.7rem;letter-spacing:.14em}
+      .loading-screen--boot .loading-hero{align-self:center}
+      .loading-screen--boot .loading-hero span{font-size:.65rem;letter-spacing:.14em}
+      .loading-screen--boot .loading-hero p{max-width:8ch;margin:.6rem 0 0;font:clamp(3.4rem,9vw,8rem)/.82 Georgia,serif;letter-spacing:-.055em}
+      .loading-screen--boot .loading-rule{height:1px;margin:.85rem 0;background:rgba(242,239,233,.18)}
+      .loading-screen--boot .loading-meta{display:flex;justify-content:space-between;color:rgba(242,239,233,.62);font-size:.6rem;letter-spacing:.1em}
+      .formdrive-cached .loading-screen--boot{display:none}
+    </style>
     <title>FORMDRIVE — Interactive Automotive Studio</title>
   </head>
-  <body><div id="root"></div><script type="module" src="/src/main.jsx"></script></body>
+  <body>
+    <div id="root">
+      <section class="loading-screen loading-screen--boot" aria-label="FormDrive studio loading" aria-busy="true">
+        <header class="loading-header"><span>FORMDRIVE</span><span>REALTIME AUTOMOTIVE STUDIO</span></header>
+        <div class="loading-hero" aria-hidden="true"><span>INITIALIZING / 00</span><p>Shape takes form.</p></div>
+        <div class="loading-telemetry">
+          <div class="loading-status"><span>PREPARING INTERFACE</span><strong>00</strong></div>
+          <div class="loading-rule"></div>
+          <div class="loading-meta"><span>WEBGPU / WEBGL</span><span>FORMDRIVE © 2026</span></div>
+        </div>
+      </section>
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

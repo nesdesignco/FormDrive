@@ -1,10 +1,10 @@
 import React, { Component, Suspense, useCallback, useEffect } from "react";
-import { useGLTF } from "@react-three/drei";
 import { VEHICLES } from "../../config/studioConfig";
 import { useStudioStore } from "../../state/useStudioStore";
+import { useVehicleGLTF } from "../../hooks/useVehicleGLTF";
 
 function VehicleLoadGate({ vehicleId, onReady }) {
-  useGLTF(VEHICLES[vehicleId].url);
+  useVehicleGLTF(VEHICLES[vehicleId].url);
 
   useEffect(() => {
     onReady(vehicleId);

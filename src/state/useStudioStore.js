@@ -15,6 +15,10 @@ export const useStudioStore = create((set, get) => ({
   panelOpen: true,
   infoOpen: false,
   renderer: null,
+  initialSceneReady: false,
+  initialAssetProgress: 0,
+  initialAssetLoadedBytes: 0,
+  initialAssetTotalBytes: 0,
   requestVehicle: (vehicle) => {
     if (vehicle === get().vehicle || vehicle === get().pendingVehicle) return;
     set({ pendingVehicle: vehicle, vehicleLoadError: null });
@@ -51,6 +55,12 @@ export const useStudioStore = create((set, get) => ({
   openInfo: () => set({ infoOpen: true }),
   closeInfo: () => set({ infoOpen: false }),
   setRenderer: (renderer) => set({ renderer }),
+  setInitialSceneReady: () => set({ initialSceneReady: true }),
+  setInitialAssetTransfer: ({ loadedBytes, totalBytes, progress }) => set({
+    initialAssetLoadedBytes: loadedBytes,
+    initialAssetTotalBytes: totalBytes,
+    initialAssetProgress: progress,
+  }),
   capture: () => {
     const renderer = get().renderer;
     if (!renderer) return;

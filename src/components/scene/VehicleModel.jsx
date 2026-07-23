@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
 import { Box3, Color, Euler, MathUtils, Matrix4, Vector3 } from "three";
 import { PAINTS, VEHICLES, WHEELS } from "../../config/studioConfig";
 import { useStudioStore } from "../../state/useStudioStore";
+import { useVehicleGLTF } from "../../hooks/useVehicleGLTF";
 
 function lowestCommonAncestor(objects) {
   if (!objects.length) return null;
@@ -76,11 +76,23 @@ function measureHeadlightAnchors(lightObjects, transform) {
 
 function VehicleModelInstance({ vehicleId }) {
   const state = useStudioStore();
+  const setInitialSceneReady = useStudioStore((store) => store.setInitialSceneReady);
   const config = VEHICLES[vehicleId];
-  const source = useGLTF(config.url);
+  const source = useVehicleGLTF(config.url, vehicleId === "mustang" && !state.initialSceneReady);
   const group = useRef();
   const headlightLevel = useRef(0);
   const tailLightLevel = useRef(0);
+
+  useEffect(() => {
+    let finalFrame;
+    const firstFrame = window.requestAnimationFrame(() => {
+      finalFrame = window.requestAnimationFrame(setInitialSceneReady);
+    });
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      if (finalFrame) window.cancelAnimationFrame(finalFrame);
+    };
+  }, [setInitialSceneReady]);
 
   useEffect(() => {
     if (!import.meta.env.DEV) return undefined;
@@ -313,8 +325,6 @@ function VehicleModelInstance({ vehicleId }) {
 
   return <group ref={group} scale={model.scale} position={[0, config.groundOffset, 0]} rotation={config.rotation}><primitive object={model.scene} /></group>;
 }
-
-useGLTF.preload(VEHICLES.mustang.url);
 
 export function VehicleModel() {
   const selectedVehicle = useStudioStore((state) => state.vehicle);
